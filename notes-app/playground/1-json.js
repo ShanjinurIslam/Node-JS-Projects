@@ -14,4 +14,4 @@ person.age = 24
 
 console.log(person)
 
-fs.writeFileSync(person.name+'.json',JSON.stringify(person))
+fs.writeFileSync('1-json',JSON.stringify(person))

@@ -4,12 +4,15 @@ const getNotes = function () {
     return "Your Notes...";
 }
 
-const addNote = function (title, body) {
+const addNote = (title, body) => {
     const notes = loadNotes()
 
-    const duplicateNotes = notes.filter(function (note) {
-        return note.title == title
-    })
+    // const duplicateNotes = notes.filter(function (note) {
+    //     return note.title == title
+    // })
+
+    const duplicateNotes = notes.filter((note) => note.title == title)
+
 
     if (duplicateNotes.length == 0) {
         notes.push({ title: title, body: body })
@@ -22,11 +25,9 @@ const addNote = function (title, body) {
 
 }
 
-const removeNote = function (title) {
+const removeNote = (title) => {
     const notes = loadNotes()
-    const filteredNotes = notes.filter(function (note) {
-        return note.title != title
-    })
+    const filteredNotes = notes.filter((note) => note.title != title)
     if (filteredNotes.length == notes.length) {
         console.log('Title not found')
     }
@@ -36,12 +37,18 @@ const removeNote = function (title) {
     }
 }
 
-const saveNotes = function (notes) {
+const saveNotes = (notes) => {
     const json = JSON.stringify(notes)
     fs.writeFileSync('notes.json', json)
 }
 
-const loadNotes = function () {
+const readNote = (title) => {
+    const notes = loadNotes()
+    const note = notes.filter((note)=>note.title==title)
+    return note
+}
+
+const loadNotes = () => {
     try {
         const dataBuffer = fs.readFileSync('notes.json')
         const dataJSON = dataBuffer.toString()
@@ -51,4 +58,4 @@ const loadNotes = function () {
     }
 }
 
-module.exports = { getNotes: getNotes, addNote: addNote,removeNote:removeNote}
+module.exports = { getNotes: getNotes, addNote: addNote, removeNote: removeNote,loadNotes:loadNotes,readNote:readNote }

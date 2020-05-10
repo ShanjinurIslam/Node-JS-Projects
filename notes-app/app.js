@@ -36,14 +36,25 @@ yargs.command({
 })
 
 yargs.command({
-    command: 'read', describe: 'Read note', handler: function () {
-        console.log('Reading notes');
+    command: 'read', describe: 'Read note', builder: {
+        title: {
+            describe: 'Note Title',
+            demandOption: true,
+            type: 'string'
+        }
+    }, handler: function (argv) {
+        const note = noteUtils.readNote(argv.title)
+        console.log(note)
     }
 })
 
 yargs.command({
     command: 'list', describe: 'List notes', handler: function () {
-        console.log('Listing notes');
+        const notes = noteUtils.loadNotes()
+        console.log(chalk.green.bold("Your Notes"))
+        notes.forEach(element => {
+            console.log(element.title)
+        });
     }
 })
 
