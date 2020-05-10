@@ -1,17 +1,48 @@
 const validator = require('validator')
 const chalk = require('chalk')
-const getNotes = require('./notes')
+const yargs = require('yargs')
 
-console.log(getNotes())
-const flag = validator.isURL('http://www.google.com');
+const command = process.argv[2]
 
-if(flag){
-    console.log('Is Url? ' +String(chalk.bold.inverse.green(flag)))
-}
-else{
-    console.log('Is Url? ' +String(chalk.bold.red(flag)))
-}
+yargs.version('1.0')
 
-console.log(chalk.green.bold.inverse('Success'))
+// add,remove,read,list
 
-console.log(chalk.red('Md. Shanjinur Islam'))
+yargs.command({
+    command: 'add', describe: 'Add new note', builder: {
+        title: {
+            describe: 'Note Title',
+            demandOption: true,
+            type: 'string'
+        },
+        body: {
+            describe: 'Note body',
+            demandOption: true,
+            type: 'string'
+        }
+    }, handler: function (argv) {
+        console.log('Title: ' + argv.title)
+        console.log('Body: ' + argv.body)
+    }
+})
+
+yargs.command({
+    command: 'remove', describe: 'Remove note', handler: function () {
+        console.log('Removing new note');
+    }
+})
+
+yargs.command({
+    command: 'read', describe: 'Read note', handler: function () {
+        console.log('Reading notes');
+    }
+})
+
+yargs.command({
+    command: 'list', describe: 'List notes', handler: function () {
+        console.log('Listing notes');
+    }
+})
+
+yargs.parse()
+
