@@ -12,4 +12,6 @@ else{
     console.log('Is Url? ' +String(chalk.bold.red(flag)))
 }
 
-console.log(chalk.green('Success'))
+console.log(chalk.green.bold.inverse('Success'))
+
+console.log(chalk.red('Md. Shanjinur Islam'))
