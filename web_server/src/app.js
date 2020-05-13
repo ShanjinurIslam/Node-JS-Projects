@@ -1,6 +1,7 @@
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const utils = require('./utils')
 
 const publicDirectoryPath = path.join(__dirname, '../public')
 const viewsPath = path.join(__dirname, '../templates/views')
@@ -28,7 +29,23 @@ app.get('/help', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
-    res.send({ weather: 'Rainy', location: 'Dhaka' })
+    if (!req.query.address) {
+        return res.send({ 'error': 'Address is blank' })
+    }
+    utils.geocode(req.query.address, (error, data) => {
+        if (error) {
+            return res.send({ 'error': error })
+        } else {
+            utils.weather(data.lat, data.long, (error, data) => {
+                if (error) {
+                    return res.send({ 'error': error })
+                } else {
+                    //console.log(data.current) can be extended
+                    return res.send({ icon: data.current.weather_icons[0], temperature: data.current.temperature, forecast: data.current.weather_descriptions[0], location: req.query.address })
+                }
+            })
+        }
+    })
 })
 
 app.get('*', (req, res) => {
