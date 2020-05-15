@@ -1,16 +1,18 @@
 {
-  "name": "tasks_app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "hbs": "^4.1.1",
-    "mongodb": "^3.5.7"
-  }
+    "name": "tasks_app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon src/index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "hbs": "^4.1.1",
+        "mongodb": "^3.5.7",
+        "mongoose": "^5.9.14",
+        "validator": "^13.0.0"
+    }
 }
