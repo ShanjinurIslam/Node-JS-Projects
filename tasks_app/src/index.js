@@ -3,6 +3,7 @@ const express = require('express')
 const hbs = require('hbs')
 const User = require('./models/user')
 const Task = require('./models/task')
+
 require('./db/mangoose')
 
 // path setup
@@ -25,10 +26,21 @@ hbs.registerPartials(partialsPath)
 app.post('/users', async(req, res) => {
     const new_user = new User(req.body)
     try {
-        await new_user.save()
-        res.status(201).send(new_user)
+        const user = await new_user.save()
+        const token = await user.generateAuthToken()
+        res.status(201).send({ user, token })
     } catch (e) {
         res.status(400).send(e)
+    }
+})
+
+app.post('/users/login', async(req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const token = await user.generateAuthToken()
+        res.send({ user, token })
+    } catch (e) {
+        res.status(500).send(e)
     }
 })
 
@@ -66,10 +78,15 @@ app.patch('/users/:id', async(req, res) => {
     }
 
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        //const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        const user = await User.findById(req.params.id)
+
         if (!user) {
             return res.status(404).send()
         }
+        updates.forEach((update) => user[update] = req.body[update])
+        await user.save()
+
         res.status(200).send(user)
     } catch (e) {
         res.status(500).send(e)
